@@ -65,3 +65,19 @@ class StudentT:
         self.kappa = kappaT0
         self.alpha = alphaT0
         self.beta = betaT0
+
+class Poisson:
+    def __init__(self, k, theta):
+        self.k0 = self.k = np.array([k])
+        self.theta0 = self.theta = np.array([theta])
+
+    def pdf(self, data):
+        return stats.nbinom.pmf(data,self.k, 1/(1+self.theta))
+
+    def update_theta(self, data):
+        kT0 = np.concatenate((self.k0, self.k+data))
+        thetaT0 = np.concatenate((self.theta0, self.theta/(1+self.theta)))
+
+        self.k = kT0
+        self.theta = thetaT0
+
